@@ -11,7 +11,10 @@
         <a class="btn btn-primary" href="/write">글쓰기</a>
         <div class="card" th:each="article : *{articles}">
             <div class="card-body">
-                <div class="card-title" th:text="${article.title}"></div>
+                <a th:href="@{/article/{id}(id=${article.id}) }">
+                    <div class="card-title" th:text="${article.title}"></div>
+                </a>
+
             </div>
         </div>
     </div>

@@ -5,10 +5,7 @@ import kr.ac.mjc.blog.dto.ArticleDto;
 import kr.ac.mjc.blog.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -40,4 +37,14 @@ public class BlogController {
         mav.setViewName("redirect:/");
         return mav;
     }
+
+    @GetMapping("/article/{id}")
+    public ModelAndView getArticleItem(@PathVariable("id") long id){
+        Article article=blogService.getArticleItem(id);
+        ModelAndView mav=new ModelAndView();
+        mav.addObject("article",article);
+        mav.setViewName("item");
+        return mav;
+    }
+
 }
