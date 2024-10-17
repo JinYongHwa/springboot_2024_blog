@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .list{
+            display:grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="list">
+        <div  th:each="article : *{list}">
+            <h1 th:text="${article.title}"></h1>
+        </div>
+    </div>
+
+</body>
+</html>
