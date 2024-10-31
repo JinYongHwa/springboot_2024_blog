@@ -1,5 +1,6 @@
 package kr.ac.mjc.blog.service;
 
+import jakarta.transaction.Transactional;
 import kr.ac.mjc.blog.domain.Article;
 import kr.ac.mjc.blog.dto.ArticleDto;
 import kr.ac.mjc.blog.repository.BlogRepository;
@@ -41,6 +42,28 @@ public class BlogService {
             return result.get();
         }
         
+    }
+
+    public boolean deleteArticle(long id){
+        Article article=getArticleItem(id); //글이 있는지 확인
+        if(article==null){
+            return false;
+        }
+        blogRepository.deleteById(id);
+        return true;
+    }
+
+    @Transactional
+    public Article modifyArticle(long id,ArticleDto articleDto){
+        Optional<Article> result=blogRepository.findById(id);
+        if(!result.isEmpty()){
+            Article article=result.get();
+            article.setTitle(articleDto.getTitle());
+            article.setContent(articleDto.getContent());
+            blogRepository.save(article);
+            return article;
+        }
+        return null;
     }
 
 }

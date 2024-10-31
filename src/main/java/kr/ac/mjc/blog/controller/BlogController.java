@@ -46,5 +46,13 @@ public class BlogController {
         mav.setViewName("item");
         return mav;
     }
+    @GetMapping("/article/modify/{id}")
+    public ModelAndView modifyArticle(@PathVariable("id") long id){
+        Article article=blogService.getArticleItem(id);
+        ModelAndView mav=new ModelAndView();
+        mav.addObject("article",article);
+        mav.setViewName("modify");
+        return mav;
+    }
 
 }
