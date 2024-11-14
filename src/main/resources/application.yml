@@ -4,6 +4,12 @@ spring:
     username: root
     password: itc801
     driver-class-name: com.mysql.cj.jdbc.Driver
+  session:
+    timeout:
+      seconds: 900
+    store-type: jdbc
+    jdbc:
+      initialize-schema: always
   jpa:
     hibernate:
       ddl-auto: update

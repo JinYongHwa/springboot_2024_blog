@@ -1,9 +1,12 @@
 package kr.ac.mjc.blog.dto;
 
+import java.util.List;
+
 public class ArticleDto {
     private Long id;
     private String title;
     private String content;
+    private List<Long> categoryIds;
 
     public Long getId() {
         return id;
@@ -27,5 +30,13 @@ public class ArticleDto {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public List<Long> getCategoryIds() {
+        return categoryIds;
+    }
+
+    public void setCategoryIds(List<Long> categoryIds) {
+        this.categoryIds = categoryIds;
     }
 }

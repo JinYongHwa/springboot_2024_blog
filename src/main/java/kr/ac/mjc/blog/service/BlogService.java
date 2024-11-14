@@ -2,8 +2,12 @@ package kr.ac.mjc.blog.service;
 
 import jakarta.transaction.Transactional;
 import kr.ac.mjc.blog.domain.Article;
+import kr.ac.mjc.blog.domain.Category;
+import kr.ac.mjc.blog.domain.User;
 import kr.ac.mjc.blog.dto.ArticleDto;
 import kr.ac.mjc.blog.repository.BlogRepository;
+import kr.ac.mjc.blog.repository.CategoryRepository;
+import kr.ac.mjc.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +21,30 @@ public class BlogService {
     @Autowired
     BlogRepository blogRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    CategoryRepository categoryRepository;
+
     public ArrayList<Article> getArticleList(){
         List<Article> list=blogRepository.findAll();
         return (ArrayList<Article>) list;
     }
 
-    public Article writeArticle(ArticleDto articleDto){
+    public Article writeArticle(ArticleDto articleDto,String userId){
+        User user= userRepository.findById(userId).get();
         Article article=new Article(articleDto.getTitle(),articleDto.getContent());
-        System.out.println(article.getTitle());
-        System.out.println(article.getContent());
+        article.setWriter(user);    //현재 로그인된 사용자를 Article의 작성자로 지정
+
+        //선택된 categoryIds를 이용하여 카테고리 설정하기
+        List<Category> categoryList=new ArrayList<>();
+        for(long categoryId:articleDto.getCategoryIds()){
+            Category category=categoryRepository.findById(categoryId).get();
+            categoryList.add(category);
+        }
+        article.setCategoryList(categoryList);
+
         article=blogRepository.save(article);
         return article;
     }

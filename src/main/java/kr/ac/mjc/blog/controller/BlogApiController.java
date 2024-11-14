@@ -1,5 +1,6 @@
 package kr.ac.mjc.blog.controller;
 
+import jakarta.servlet.http.HttpSession;
 import kr.ac.mjc.blog.domain.Article;
 import kr.ac.mjc.blog.dto.ArticleDto;
 import kr.ac.mjc.blog.dto.ArticleResponseDto;
@@ -15,13 +16,22 @@ public class BlogApiController {
     BlogService blogService;
 
     @PostMapping("/api/articles")
-    public ResponseEntity writeArticle(@RequestBody ArticleDto articleDto){
-        Article article=blogService.writeArticle(articleDto);
+    public ResponseEntity writeArticle(@RequestBody ArticleDto articleDto, HttpSession session){
+        String loginUserId= (String) session.getAttribute("loginUserId");
         ArticleResponseDto response=new ArticleResponseDto();
-        if(article!=null){
-            response.setSuccess(true);
-            response.setArticle(article);
+        if(loginUserId==null){  //로그인 되어있지 않을경우
+            response.setSuccess(false);
+
         }
+        else{   //로그인 되어있을경우
+            Article article=blogService.writeArticle(articleDto,loginUserId);
+            if(article!=null){
+                response.setSuccess(true);
+                response.setArticle(article);
+            }
+        }
+
+
         return ResponseEntity.ok(response);
     }
 

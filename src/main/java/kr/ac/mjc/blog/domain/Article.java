@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -31,8 +32,11 @@ public class Article {
     @Column(name="updated_at")
     private LocalDateTime updatedAt;
 
-    private ArrayList<String> categoryList;
+    @ManyToOne
+    private User writer;
 
+    @ManyToMany
+    private List<Category> categoryList;
 
     public Article(){}
 
@@ -65,13 +69,7 @@ public class Article {
         this.content = content;
     }
 
-    public ArrayList<String> getCategoryList() {
-        return categoryList;
-    }
 
-    public void setCategoryList(ArrayList<String> categoryList) {
-        this.categoryList = categoryList;
-    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -87,5 +85,21 @@ public class Article {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public User getWriter() {
+        return writer;
+    }
+
+    public void setWriter(User writer) {
+        this.writer = writer;
+    }
+
+    public List<Category> getCategoryList() {
+        return categoryList;
+    }
+
+    public void setCategoryList(List<Category> categoryList) {
+        this.categoryList = categoryList;
     }
 }

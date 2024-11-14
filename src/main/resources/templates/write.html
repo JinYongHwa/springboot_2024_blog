@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>글쓰기</title>
@@ -8,6 +8,14 @@
 </head>
 <body>
   <div class="container">
+    <div th:each="category : *{categoryList}">
+        <div class="form-check">
+            <input class="form-check-input category" type="checkbox" th:value="${category.id}" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault" th:text="${category.name}">
+
+            </label>
+        </div>
+    </div>
 
     <input id="title" class="form-control" name="title" placeholder="제목">
     <textarea id="content"  class="form-control mt-2" name="content" placeholder="내용"></textarea>
@@ -16,6 +24,45 @@
     </div>
 
   </div>
-  <script src="/js/write.js"></script>
+  <script>
+    var title=document.getElementById("title")
+    var content=document.getElementById("content")
+    var submitBtn=document.getElementById("submit-btn")
+
+    submitBtn.addEventListener("click",event=>{
+        var checkedCategory=document.querySelectorAll(".category:checked")
+        if(checkedCategory.length==0){
+            return alert("카테고리를 선택해주세요")
+        }
+        var categoryIds=[]
+        for(var i=0;i<checkedCategory.length;i++){
+            var value=checkedCategory[i].value
+            categoryIds.push(Number(value))
+        }
+
+        console.log(title.value,content.value,categoryIds)
+        fetch("/api/articles",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                title:title.value,
+                content:content.value,
+                categoryIds:categoryIds
+            })
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then(result=>{
+           console.log(result)
+           if(result.success){  //작성성공시
+            location.href="/article/"+result.article.id //작성한 글로 이동
+           }
+        })
+    })
+
+  </script>
 </body>
 </html>

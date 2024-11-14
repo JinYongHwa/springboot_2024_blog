@@ -23,7 +23,6 @@ public class TestController {
         categoryList.add("전공");
         categoryList.add("정보");
 
-        article.setCategoryList(categoryList);
 
         model.addAttribute("article",article);
         return "test";
